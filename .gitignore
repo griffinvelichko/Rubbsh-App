@@ -1,56 +1,108 @@
-# Basic .gitignore
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# macOS
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
 .DS_Store
-.AppleDouble
-.LSOverride
+*.pem
 
-# Thumbnails
-Thumbs.db
-
-# Node.js
-node_modules/
+# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Env files
+# local env files
+.env*.local
 .env
-.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Build / output
-dist/
-build/
-out/
-coverage/
-*.log
+# vercel
+.vercel
 
-# Editor / IDE
-.vscode/
-.idea/
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDEs and editors
+/.vscode
+/.idea
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
 *.sublime-workspace
 *.sublime-project
-*.iml
 
-# Python (if used)
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Icon?
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# dotenv environment variables file
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# turbo
+.turbo
+
+# Python (if used for scripts)
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+.Python
 venv/
 env/
+ENV/
 
 # Temporary files
-*.swp
 *.tmp
 *.temp
 .cache/
 .sass-cache/
+.parcel-cache/
 
-# OS generated files
-*.DS_Store
-ehthumbs.db
-Icon?
-
-# Lock files and config (track these if needed)
+# Lock files (uncomment to ignore)
 # package-lock.json
 # yarn.lock
+# pnpm-lock.yaml
