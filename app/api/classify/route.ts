@@ -3,6 +3,7 @@ import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { classificationResponseSchema } from '@/lib/validation'
 import type { ClassificationResponse } from '@/app/types'
+import { uploadWasteImage, saveRecommendation } from '@/lib/supabase'
 
 // Rate limiting and size constraints
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10MB
@@ -57,9 +58,36 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Convert image to base64
+    // Convert image to buffer
     const arrayBuffer = await imageFile.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
+
+    // Upload image to Supabase Storage and save metadata
+    console.log('[Classify API] Uploading image to Supabase...')
+    let imageId: string
+    let storagePath: string
+    let publicUrl: string
+
+    try {
+      const uploadResult = await uploadWasteImage(buffer, imageFile.type)
+      imageId = uploadResult.imageId
+      storagePath = uploadResult.storagePath
+      publicUrl = uploadResult.publicUrl
+      console.log('[Classify API] Image uploaded successfully:', { imageId, storagePath })
+    } catch (uploadError) {
+      console.error('[Classify API] Failed to upload image:', uploadError)
+      return NextResponse.json(
+        {
+          error: true,
+          error_description: 'Failed to store image',
+          summary: '',
+          parts: []
+        },
+        { status: 500 }
+      )
+    }
+
+    // Convert image to base64 for Grok API
     const base64Image = buffer.toString('base64')
     const imageDataUrl = `data:${imageFile.type};base64,${base64Image}`
 
@@ -172,14 +200,38 @@ export async function POST(request: NextRequest) {
 
     const classificationResult: ClassificationResponse = validationResult.data
 
-    // If classification returned an error, return 422
-    if (classificationResult.error) {
-      return NextResponse.json(classificationResult, { status: 422 })
+    // Save recommendation to database
+    console.log('[Classify API] Saving recommendation to database...')
+    try {
+      const recommendationId = await saveRecommendation(imageId, classificationResult)
+      console.log('[Classify API] Recommendation saved:', recommendationId)
+    } catch (dbError) {
+      console.error('[Classify API] Failed to save recommendation:', dbError)
+      // Continue anyway - the classification was successful, just logging failed
     }
 
-    // Success
+    // If classification returned an error, return 422
+    if (classificationResult.error) {
+      return NextResponse.json(
+        {
+          ...classificationResult,
+          imageId,
+          imageUrl: publicUrl,
+        },
+        { status: 422 }
+      )
+    }
+
+    // Success - include image metadata in response
     console.log('[Classify API] Classification successful:', classificationResult.summary)
-    return NextResponse.json(classificationResult, { status: 200 })
+    return NextResponse.json(
+      {
+        ...classificationResult,
+        imageId,
+        imageUrl: publicUrl,
+      },
+      { status: 200 }
+    )
 
   } catch (error) {
     console.error('[Classify API] Unexpected error:', error)

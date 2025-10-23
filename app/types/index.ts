@@ -13,6 +13,8 @@ export interface ClassificationResponse {
   error_description: string
   summary: string
   parts: WastePart[]
+  imageId?: string  // UUID of the image in waste_images table
+  imageUrl?: string // Public URL of the stored image
 }
 
 export interface CameraPermissionState {
