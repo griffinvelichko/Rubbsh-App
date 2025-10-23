@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
             ]
           }
         ],
-        temperature: 1,
+        temperature: 0.5,
       })
     })
 
