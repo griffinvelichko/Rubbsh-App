@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'grok-2-vision-1212',
+        model: 'grok-4-fast-reasoning',
         messages: [
           {
             role: 'system',

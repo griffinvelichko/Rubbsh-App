@@ -1,3 +1,5 @@
 {
+  "/api/classify/route": "app/api/classify/route.js",
+  "/suggestions/page": "app/suggestions/page.js",
   "/page": "app/page.js"
 }

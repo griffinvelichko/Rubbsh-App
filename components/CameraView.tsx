@@ -33,7 +33,9 @@ export default function CameraView() {
         body: formData
       })
 
-      if (!response.ok && retries > 0) {
+      // Only retry on 5xx server errors, not 4xx client errors
+      // 422 means Grok successfully classified but found an error (no waste item, etc.)
+      if (!response.ok && response.status >= 500 && retries > 0) {
         console.log(`Upload failed, retrying... (${retries} attempts left)`)
         await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS))
         return uploadWithRetry(formData, retries - 1)
@@ -68,11 +70,18 @@ export default function CameraView() {
       // Upload with retry logic
       const response = await uploadWithRetry(formData)
 
-      if (!response.ok) {
+      // 422 is valid - it means Grok returned an error message
+      // Only retry on 5xx server errors, not on 4xx client/validation errors
+      if (!response.ok && response.status >= 500) {
         throw new Error(`Classification failed: ${response.status}`)
       }
 
       const data = await response.json()
+
+      // If we got a non-200 response, it might still have valid error data
+      if (!response.ok && !data.error) {
+        throw new Error(`Classification failed: ${response.status}`)
+      }
 
       // Store result (consider using Context or Zustand instead)
       try {
@@ -194,7 +203,7 @@ export default function CameraView() {
               onClick={handleCapture}
               disabled={isCapturing || !isVideoReady}
               className={`
-                capture-button relative w-20 h-20 rounded-full border-4 border-white
+                capture-button relative w-20 h-20 rounded-full border-4 border-white bg-transparent
                 transition-all duration-200 transform
                 ${isCapturing ? 'scale-90 opacity-70' : 'hover:scale-105 active:scale-95'}
                 ${!isVideoReady ? 'opacity-50 cursor-not-allowed' : ''}
@@ -202,34 +211,12 @@ export default function CameraView() {
               aria-label="Capture photo"
             >
               <div className="absolute inset-2 bg-white rounded-full flex items-center justify-center">
-                {isCapturing ? (
-                  <div className="w-8 h-8 border-3 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <div className="w-full h-full bg-red-500 rounded-full" />
+                {isCapturing && (
+                  <div className="w-6 h-6 border-3 border-gray-400 border-t-transparent rounded-full animate-spin" />
                 )}
               </div>
             </button>
           </div>
-
-          {/* Additional controls */}
-          <div className="flex justify-center mt-6 gap-4">
-            <button
-              onClick={restart}
-              className="text-white/70 hover:text-white text-sm transition-colors"
-              aria-label="Switch camera"
-            >
-              Switch Camera
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Focus indicator (optional) */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <svg className="w-64 h-64 text-white/30" viewBox="0 0 100 100">
-            <rect x="10" y="10" width="80" height="80" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="5 5" />
-          </svg>
         </div>
       </div>
     </div>
