@@ -1,20 +1,6 @@
-import { createClient } from '@supabase/supabase-js'
-
-// Validate environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables')
-}
-
-// Create a single supabase client for server-side operations
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false,
-  },
-})
+// Import the server client for server-side operations
+// Note: This file should only be imported in server components, API routes, or server actions
+import { createClient } from '@/lib/supabase/server'
 
 // Type definitions for our database tables
 export interface WasteImage {
@@ -39,13 +25,17 @@ export interface Recommendation {
 // Helper function to upload image to Supabase Storage
 export async function uploadWasteImage(
   buffer: Buffer,
-  mimeType: string
+  mimeType: string,
+  userId: string
 ): Promise<{ imageId: string; storagePath: string; publicUrl: string }> {
+  const supabase = await createClient()
+
   // Generate unique filename with timestamp
   const timestamp = Date.now()
   const extension = mimeType.split('/')[1] || 'jpg'
   const filename = `${timestamp}-${crypto.randomUUID()}.${extension}`
-  const storagePath = `waste-images/${filename}`
+  // Store in user-specific folder: userId/filename
+  const storagePath = `${userId}/${filename}`
 
   // Upload to Supabase Storage
   const { data: uploadData, error: uploadError } = await supabase.storage
@@ -68,6 +58,7 @@ export async function uploadWasteImage(
       storage_path: uploadData.path,
       file_size: buffer.length,
       mime_type: mimeType,
+      user_id: userId,
     })
     .select()
     .single()
@@ -94,6 +85,7 @@ export async function uploadWasteImage(
 // Helper function to save classification recommendation
 export async function saveRecommendation(
   imageId: string,
+  userId: string,
   classification: {
     error: boolean
     error_description: string
@@ -101,10 +93,13 @@ export async function saveRecommendation(
     parts: any[]
   }
 ): Promise<string> {
+  const supabase = await createClient()
+
   const { data, error } = await supabase
     .from('recommendations')
     .insert({
       image_id: imageId,
+      user_id: userId,
       error: classification.error ? classification.error_description : null,
       error_description: classification.error ? classification.error_description : null,
       summary: classification.summary,

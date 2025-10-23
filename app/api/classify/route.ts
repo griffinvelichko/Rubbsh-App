@@ -4,6 +4,7 @@ import { join } from 'path'
 import { classificationResponseSchema } from '@/lib/validation'
 import type { ClassificationResponse } from '@/app/types'
 import { uploadWasteImage, saveRecommendation } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/server'
 
 // Rate limiting and size constraints
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10MB
@@ -11,6 +12,23 @@ const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'
 
 export async function POST(request: NextRequest) {
   try {
+    // Get authenticated user from session
+    const supabase = await createClient()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      console.error('[Classify API] Authentication error:', authError)
+      return NextResponse.json(
+        { error: true, error_description: 'Authentication required', summary: '', parts: [] },
+        { status: 401 }
+      )
+    }
+
+    console.log('[Classify API] User authenticated:', user.id, 'Anonymous:', user.is_anonymous)
+
     // Validate API key
     const apiKey = process.env.GROK_API_KEY
     if (!apiKey) {
@@ -69,11 +87,11 @@ export async function POST(request: NextRequest) {
     let publicUrl: string
 
     try {
-      const uploadResult = await uploadWasteImage(buffer, imageFile.type)
+      const uploadResult = await uploadWasteImage(buffer, imageFile.type, user.id)
       imageId = uploadResult.imageId
       storagePath = uploadResult.storagePath
       publicUrl = uploadResult.publicUrl
-      console.log('[Classify API] Image uploaded successfully:', { imageId, storagePath })
+      console.log('[Classify API] Image uploaded successfully:', { imageId, storagePath, userId: user.id })
     } catch (uploadError) {
       console.error('[Classify API] Failed to upload image:', uploadError)
       return NextResponse.json(
@@ -203,7 +221,7 @@ export async function POST(request: NextRequest) {
     // Save recommendation to database
     console.log('[Classify API] Saving recommendation to database...')
     try {
-      const recommendationId = await saveRecommendation(imageId, classificationResult)
+      const recommendationId = await saveRecommendation(imageId, user.id, classificationResult)
       console.log('[Classify API] Recommendation saved:', recommendationId)
     } catch (dbError) {
       console.error('[Classify API] Failed to save recommendation:', dbError)
