@@ -11,7 +11,7 @@ export const metadata: Metadata = {
       style-src 'self' 'unsafe-inline';
       img-src 'self' blob: data:;
       media-src 'self' blob:;
-      connect-src 'self' https://api.x.ai;
+      connect-src 'self' https://api.x.ai https://gafqrrhapewwzayngzqr.supabase.co wss://gafqrrhapewwzayngzqr.supabase.co;
     `.replace(/\s+/g, ' ')
   }
 }
