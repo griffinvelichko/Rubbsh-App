@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Privacy Policy - Rubbish App',
-  description: 'Privacy Policy for Rubbish App waste classification service'
+  title: 'Privacy Policy - Rubbsh App',
+  description: 'Privacy Policy for Rubbsh App waste classification service'
 }
 
 export default function PrivacyPolicy() {
@@ -20,258 +20,174 @@ export default function PrivacyPolicy() {
 
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Privacy Policy</h1>
         <p className="text-gray-600 mb-8">
-          <strong>Effective Date:</strong> January 23, 2025<br />
-          <strong>Last Updated:</strong> January 23, 2025
+          <strong>Effective Date:</strong> October 23, 2025<br />
+          <strong>Last Updated:</strong> October 23, 2025
         </p>
 
         <div className="prose prose-gray max-w-none space-y-6">
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">1. Introduction</h2>
             <p className="text-gray-700 leading-relaxed">
-              Welcome to Rubbish App, operated as a sole proprietorship. This Privacy Policy explains
-              how we collect, use, store, and share your information when you use our waste classification
-              service. By using Rubbish App, you agree to the collection and use of information in
-              accordance with this policy.
+              Welcome to Rubbsh App. We are a sole-proprietorship ("We", "Us", "Our") operating the waste
+              classification service. This Privacy Policy explains how we collect, use, store and share your
+              data when you use the Service. By using the Service, you consent to this Policy and our Terms
+              & Conditions.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-3">2. Information We Collect</h2>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">2.1 Images</h3>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-3">2. Definitions</h2>
             <p className="text-gray-700 leading-relaxed mb-3">
-              We collect and store all images you capture or upload through the Rubbish App. This includes:
+              "Service", "You", "We", "Content" as defined in the Terms.
             </p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>Photos taken using your device camera through our app</li>
-              <li>Image metadata (file size, format, timestamp)</li>
-              <li>Associated waste classification results</li>
-            </ul>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">2.2 User Identification</h3>
             <p className="text-gray-700 leading-relaxed">
-              We automatically create anonymous user accounts to enable our service. This includes:
-            </p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>Anonymous user IDs stored in browser cookies</li>
-              <li>Session data for authentication</li>
-              <li>Usage timestamps and activity logs</li>
-            </ul>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">2.3 Technical Information</h3>
-            <p className="text-gray-700 leading-relaxed">
-              We may collect technical information including:
-            </p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>Browser type and version</li>
-              <li>Device type and operating system</li>
-              <li>IP address and general location data</li>
-              <li>App performance and error logs</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-3">3. How We Use Your Information</h2>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              We use the collected information for the following purposes:
-            </p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>To provide waste classification and recycling recommendations</li>
-              <li>To improve our AI models and service accuracy</li>
-              <li>To maintain and improve app functionality</li>
-              <li>To analyze usage patterns and app performance</li>
-              <li>To comply with legal obligations</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-3">4. Data Storage</h2>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">4.1 Database Storage</h3>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              <strong>All images taken using the Rubbish App are permanently stored in our database.</strong>
-              We use Supabase, a secure cloud database provider, to store:
-            </p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>Original images you capture or upload</li>
-              <li>Image metadata and classification results</li>
-              <li>User session and activity data</li>
-            </ul>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">4.2 Data Retention</h3>
-            <p className="text-gray-700 leading-relaxed">
-              We retain your images and associated data indefinitely for service improvement and
-              research purposes. Images are organized by anonymous user ID in our storage system.
-            </p>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">4.3 Security Measures</h3>
-            <p className="text-gray-700 leading-relaxed">
-              We implement industry-standard security measures including:
-            </p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>Encrypted data transmission (HTTPS)</li>
-              <li>Secure cloud storage with access controls</li>
-              <li>Row-level security policies to isolate user data</li>
-              <li>Regular security updates and monitoring</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-3">5. Third-Party Data Sharing</h2>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">5.1 AI Service Providers</h3>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              <strong>Important:</strong> All images you upload are sent to third-party artificial intelligence
-              providers for analysis and classification. Currently, we use:
-            </p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li><strong>xAI (X.AI)</strong> - for image analysis and waste classification using their Grok AI models</li>
-              <li>Other large language model (LLM) providers as we integrate additional services</li>
-            </ul>
-            <p className="text-gray-700 leading-relaxed mt-3 mb-3">
-              These providers may:
-            </p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>Process and analyze your images on their servers</li>
-              <li>Use your images to improve their AI models (subject to their privacy policies)</li>
-              <li>Store your images temporarily or permanently according to their data retention policies</li>
-            </ul>
-
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-4">
-              <p className="text-yellow-800 font-medium">
-                <strong>User Responsibility:</strong> It is your responsibility to avoid uploading images
-                that you do not want shared with these third-party AI providers. Do not upload images containing:
-              </p>
-              <ul className="list-disc pl-6 text-yellow-800 mt-2 space-y-1">
-                <li>Personal identifying information (PII)</li>
-                <li>Sensitive or confidential documents</li>
-                <li>Private or intimate content</li>
-                <li>Proprietary or copyrighted material you do not own</li>
-              </ul>
-            </div>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">5.2 Service Providers</h3>
-            <p className="text-gray-700 leading-relaxed">
-              We share data with the following service providers who help us operate our service:
-            </p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li><strong>Supabase</strong> - database and file storage hosting</li>
-              <li><strong>Vercel</strong> (if applicable) - web hosting and deployment</li>
-              <li>Analytics providers for app performance monitoring</li>
-            </ul>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">5.3 Legal Requirements</h3>
-            <p className="text-gray-700 leading-relaxed">
-              We may disclose your information if required by law, court order, or legal process, or
-              to protect the rights, property, or safety of Rubbish App, our users, or others.
+              "AI-Providers" means third-party AI/LLM services to which we send your images for analysis.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-3">6. Cookies and Tracking</h2>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              We use browser cookies to:
+            <h2 className="text-2xl font-semibold text-gray-900 mb-3">3. Information We Collect</h2>
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">3.1 Images & Metadata</h3>
+            <p className="text-gray-700 leading-relaxed">
+              We collect all images you capture or upload, plus metadata (file size, format, timestamp) and
+              associated classification results.
             </p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>Maintain your anonymous user session</li>
-              <li>Remember your authentication status</li>
-              <li>Provide a seamless user experience</li>
-            </ul>
-            <p className="text-gray-700 leading-relaxed mt-3">
-              Our cookies typically persist for 7 days and are essential for the app to function.
-              By using Rubbish App, you consent to the use of these cookies.
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">3.2 Anonymous User Data</h3>
+            <p className="text-gray-700 leading-relaxed">
+              We generate anonymous user IDs, session data (cookies), timestamps, activity logs to support
+              the Service.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">3.3 Technical Data</h3>
+            <p className="text-gray-700 leading-relaxed">
+              We may collect browser type, device type, operating system, IP address and approximate location,
+              performance logs and error reports.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-3">7. Data Ownership and Usage Rights</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-3">4. How We Use Your Information</h2>
             <p className="text-gray-700 leading-relaxed mb-3">
-              By using Rubbish App, you understand and agree that:
+              We use your data to:
             </p>
             <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>All images uploaded become part of our dataset and are owned by Rubbish App</li>
-              <li>All AI-generated classifications and recommendations are owned by Rubbish App</li>
-              <li>We have the right to use your images for service improvement, research, and model training</li>
-              <li>We may use anonymized or aggregated data for any purpose</li>
+              <li>Provide the classification service and recommendations.</li>
+              <li>Improve our AI models and Service accuracy.</li>
+              <li>Maintain, secure and enhance the Service.</li>
+              <li>Analyse usage patterns and performance.</li>
+              <li>Comply with legal obligations.</li>
             </ul>
-            <p className="text-gray-700 leading-relaxed mt-3">
-              See our <Link href="/terms" className="text-blue-600 hover:text-blue-800 underline">Terms and Conditions</Link> for
-              more details on intellectual property rights.
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-3">5. Data Storage, Ownership & Security</h2>
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">5.1 Ownership of Data</h3>
+            <p className="text-gray-700 leading-relaxed">
+              When you upload images, those uploads become our data. You grant us all rights to use, reproduce,
+              store, analyse, and derive output from those images. All AI outputs are exclusively our property.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">5.2 Storage Location & Retention</h3>
+            <p className="text-gray-700 leading-relaxed">
+              We store images and data in our cloud database. We retain this data indefinitely unless you
+              request deletion (see section 8).
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">5.3 Security Measures</h3>
+            <p className="text-gray-700 leading-relaxed">
+              We use industry-standard security (e.g., encrypted HTTPS, secure cloud storage, access controls)
+              but no system is 100% secure; you acknowledge residual risk.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-3">6. Third-Party Data Sharing</h2>
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">6.1 AI-Providers</h3>
+            <p className="text-gray-700 leading-relaxed mb-3">
+              All uploaded images are sent to AI-Providers (e.g., xAI and others) for processing. These
+              providers may store or use the images as per their own policies. You are responsible for not
+              uploading any images you would not want shared.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">6.2 Other Service Providers</h3>
+            <p className="text-gray-700 leading-relaxed">
+              We may share data with our infrastructure providers (database, hosting, analytics) subject to
+              confidentiality obligations.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">6.3 Legal Disclosures</h3>
+            <p className="text-gray-700 leading-relaxed">
+              We may disclose your data when required by law, to protect our rights, users, or public safety.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-3">7. Cookies & Tracking</h2>
+            <p className="text-gray-700 leading-relaxed mb-3">
+              We use cookies to maintain anonymous sessions, manage login state, track usage and app performance.
+              These may persist for a fixed period (for example 7 days). You may clear cookies but that will
+              create a new anonymous session; previously uploaded images remain stored.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">8. Your Privacy Rights</h2>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">8.1 Anonymous Users</h3>
-            <p className="text-gray-700 leading-relaxed">
-              Since we use anonymous authentication, we do not collect personally identifiable information
-              by default. However, any images you upload may contain such information if you choose to
-              include it.
+            <p className="text-gray-700 leading-relaxed mb-3">
+              Because you are anonymous, we do not by default collect identifiable personal data.
             </p>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">8.2 Data Deletion</h3>
-            <p className="text-gray-700 leading-relaxed">
-              Currently, we do not offer self-service data deletion. If you wish to request deletion of
-              your data, you may contact us at the information provided in Section 12. We will review
-              such requests on a case-by-case basis, but we cannot guarantee deletion as data may be
-              retained for legitimate business purposes or legal requirements.
+            <p className="text-gray-700 leading-relaxed mb-3">
+              If you upload content with identifying information, that data may become part of our stored dataset.
             </p>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-4">8.3 Cookie Management</h3>
+            <p className="text-gray-700 leading-relaxed mb-3">
+              <strong>Data deletion requests:</strong> We do not provide automated self-service deletion. You
+              may contact us at <a href="mailto:rubbshapp@gmail.com" className="text-blue-600 hover:text-blue-800">rubbshapp@gmail.com</a> to
+              request deletion; we will review but cannot guarantee full removal because of model-training and
+              legal obligations.
+            </p>
             <p className="text-gray-700 leading-relaxed">
-              You can clear your browser cookies at any time, which will create a new anonymous user
-              session. However, your previously uploaded images will remain in our database.
+              <strong>Managing cookies:</strong> You may clear or block cookies. That ends your current session
+              but does not delete previously uploaded images.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">9. Children's Privacy</h2>
             <p className="text-gray-700 leading-relaxed">
-              Rubbish App is not intended for use by children under the age of 13. We do not knowingly
-              collect personal information from children under 13. If we become aware that we have
-              collected such information, we will take steps to delete it.
+              The Service is not intended for users under 13 years old. We do not knowingly collect data from
+              children under 13. If we become aware of such data, we will endeavour to delete it promptly.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">10. International Data Transfers</h2>
             <p className="text-gray-700 leading-relaxed">
-              Your information may be transferred to and processed in countries other than your country
-              of residence. These countries may have data protection laws that differ from those of your
-              jurisdiction. By using Rubbish App, you consent to such transfers.
+              Your data may be stored or processed in jurisdictions outside your country of residence. These
+              jurisdictions may have different data protection laws. By using the Service you consent to such
+              transfers.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">11. Changes to This Privacy Policy</h2>
             <p className="text-gray-700 leading-relaxed">
-              We may update this Privacy Policy from time to time. We will notify you of any changes by
-              posting the new Privacy Policy on this page and updating the "Last Updated" date. You are
-              advised to review this Privacy Policy periodically for any changes. Continued use of the
-              service after changes constitutes acceptance of the updated policy.
+              We may update this Privacy Policy at any time. We will post the updated version with the new
+              "Last Updated" date. Continued use of the Service after updates constitutes your acceptance.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">12. Contact Us</h2>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              If you have any questions about this Privacy Policy or our data practices, please contact us:
-            </p>
             <div className="bg-gray-50 p-4 rounded-lg">
               <p className="text-gray-700">
-                <strong>Rubbish App</strong><br />
+                <strong>Rubbsh App</strong><br />
                 Sole Proprietorship<br />
-                Email: <a href="mailto:privacy@rubbish-app.com" className="text-blue-600 hover:text-blue-800">privacy@rubbish-app.com</a>
+                Email: <a href="mailto:rubbshapp@gmail.com" className="text-blue-600 hover:text-blue-800">rubbshapp@gmail.com</a>
               </p>
             </div>
-          </section>
-
-          <section className="mt-8 pt-8 border-t border-gray-200">
-            <p className="text-gray-600 text-sm italic">
-              By using Rubbish App, you acknowledge that you have read, understood, and agree to be
-              bound by this Privacy Policy.
-            </p>
           </section>
         </div>
 
