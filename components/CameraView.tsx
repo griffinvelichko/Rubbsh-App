@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCameraStream } from '@/lib/camera-utils'
 import { compressImage } from '@/lib/image-compression'
+import { HowToUseModal } from './HowToUseModal'
 
 // Retry configuration
 const MAX_UPLOAD_RETRIES = 3
@@ -183,10 +184,13 @@ export default function CameraView() {
       <div className="camera-overlay absolute inset-0 flex flex-col">
         {/* Top section - hints and status */}
         <div className="flex-1 flex flex-col items-center justify-start p-6 safe-area-top">
-          <div className="bg-black/50 backdrop-blur-sm rounded-full px-6 py-3">
-            <p className="text-white text-center">
-              {isVideoReady ? 'Point camera at waste items' : 'Camera initializing...'}
-            </p>
+          <div className="flex items-center gap-3">
+            <div className="bg-black/50 backdrop-blur-sm rounded-full px-6 py-3">
+              <p className="text-white text-center">
+                {isVideoReady ? 'Point camera at waste items' : 'Camera initializing...'}
+              </p>
+            </div>
+            <HowToUseModal />
           </div>
 
           {captureError && (
