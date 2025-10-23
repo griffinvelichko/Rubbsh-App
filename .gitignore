@@ -1,0 +1,56 @@
+# Basic .gitignore
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+Thumbs.db
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Env files
+.env
+.env.*.local
+
+# Build / output
+dist/
+build/
+out/
+coverage/
+*.log
+
+# Editor / IDE
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.iml
+
+# Python (if used)
+__pycache__/
+*.py[cod]
+venv/
+env/
+
+# Temporary files
+*.swp
+*.tmp
+*.temp
+.cache/
+.sass-cache/
+
+# OS generated files
+*.DS_Store
+ehthumbs.db
+Icon?
+
+# Lock files and config (track these if needed)
+# package-lock.json
+# yarn.lock
