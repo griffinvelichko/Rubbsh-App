@@ -1,23 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
-import { z } from 'zod'
-
-// Validation schema for classification result
-const ClassificationResultSchema = z.object({
-  error: z.boolean(),
-  error_description: z.string(),
-  summary: z.string(),
-  parts: z.array(
-    z.object({
-      name: z.string(),
-      separation_instruction: z.string(),
-      bin: z.enum(['FoodScraps', 'RecyclableContainers', 'Paper', 'Garbage'])
-    })
-  )
-})
-
-type ClassificationResult = z.infer<typeof ClassificationResultSchema>
+import { classificationResponseSchema } from '@/lib/validation'
+import type { ClassificationResponse } from '@/app/types'
 
 // Rate limiting and size constraints
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10MB
@@ -109,14 +94,13 @@ export async function POST(request: NextRequest) {
               },
               {
                 type: 'text',
-                text: 'Analyze this waste item and provide classification in the required JSON format.'
+                text: 'Analyze this waste item and provide classification. Return ONLY valid JSON matching the exact schema shown in the system prompt. Do not include any markdown formatting, code blocks, or additional text - just the raw JSON object.'
               }
             ]
           }
         ],
         temperature: 0.1,
-        max_tokens: 1000,
-        response_format: { type: 'json_object' }
+        max_tokens: 1000
       })
     })
 
@@ -148,12 +132,28 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Extract JSON from response (handle markdown code blocks)
+    let jsonString = content.trim()
+
+    // Remove markdown code blocks if present
+    const codeBlockMatch = jsonString.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/)
+    if (codeBlockMatch) {
+      jsonString = codeBlockMatch[1].trim()
+    }
+
+    // Try to extract JSON object if there's extra text
+    const jsonMatch = jsonString.match(/\{[\s\S]*\}/)
+    if (jsonMatch) {
+      jsonString = jsonMatch[0]
+    }
+
     // Parse JSON response
     let parsedResult: unknown
     try {
-      parsedResult = JSON.parse(content)
+      parsedResult = JSON.parse(jsonString)
     } catch (parseError) {
-      console.error('[Classify API] Failed to parse JSON:', content)
+      console.error('[Classify API] Failed to parse JSON:', jsonString)
+      console.error('[Classify API] Original content:', content)
       return NextResponse.json(
         { error: true, error_description: 'Invalid classification response format', summary: '', parts: [] },
         { status: 500 }
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate with Zod schema
-    const validationResult = ClassificationResultSchema.safeParse(parsedResult)
+    const validationResult = classificationResponseSchema.safeParse(parsedResult)
 
     if (!validationResult.success) {
       console.error('[Classify API] Validation error:', validationResult.error)
@@ -171,7 +171,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const classificationResult = validationResult.data
+    const classificationResult: ClassificationResponse = validationResult.data
 
     // If classification returned an error, return 422
     if (classificationResult.error) {
