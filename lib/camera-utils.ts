@@ -14,17 +14,6 @@ export interface CameraError {
   recoverable: boolean
 }
 
-// Detect iOS browsers that don't support getUserMedia
-function isIOSChrome(): boolean {
-  const ua = navigator.userAgent
-  return /CriOS/.test(ua) || (/iPad|iPhone|iPod/.test(ua) && /Chrome/.test(ua))
-}
-
-function isIOSFirefox(): boolean {
-  const ua = navigator.userAgent
-  return /FxiOS/.test(ua)
-}
-
 function mapErrorType(error: DOMException): CameraErrorType {
   switch (error.name) {
     case 'NotAllowedError':
@@ -142,15 +131,6 @@ export function useCameraStream() {
       setError(null)
 
       // Platform checks
-      if (isIOSChrome() || isIOSFirefox()) {
-        console.log('[Camera] iOS Chrome/Firefox detected')
-        throw {
-          type: 'platform',
-          message: 'Please use Safari browser on iOS for camera access.',
-          recoverable: false
-        }
-      }
-
       if (!navigator.mediaDevices?.getUserMedia) {
         throw {
           type: 'platform',
