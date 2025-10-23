@@ -44,13 +44,16 @@ export async function updateSession(request: NextRequest) {
     !request.nextUrl.pathname.startsWith('/_next')
   ) {
     // Sign in anonymously
-    const { error } = await supabase.auth.signInAnonymously()
+    const { data, error } = await supabase.auth.signInAnonymously()
 
     if (error) {
       console.error('[Middleware] Failed to sign in anonymously:', error)
     } else {
-      console.log('[Middleware] User signed in anonymously')
+      console.log('[Middleware] 🆕 NEW anonymous user created:', data.user?.id)
     }
+  } else if (user) {
+    // User session found in cookies - reusing existing user
+    console.log('[Middleware] ♻️ REUSING existing user:', user.id, '| Anonymous:', user.is_anonymous)
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
