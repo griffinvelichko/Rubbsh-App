@@ -1,6 +1,7 @@
 'use client'
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { RingLoader } from 'react-spinners'
 import { useCameraStream } from '@/lib/camera-utils'
 import { compressImage } from '@/lib/image-compression'
 import { HowToUseModal } from './HowToUseModal'
@@ -109,7 +110,7 @@ export default function CameraView() {
     return (
       <div className="camera-container flex items-center justify-center min-h-screen bg-gray-900">
         <div className="text-center">
-          <div className="spinner w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <RingLoader color="#3b82f6" size={60} className="mx-auto mb-4" />
           <p className="text-white text-lg">Initializing camera...</p>
         </div>
       </div>
@@ -203,23 +204,25 @@ export default function CameraView() {
         {/* Bottom section - capture button */}
         <div className="p-8 safe-area-bottom">
           <div className="flex justify-center">
-            <button
-              onClick={handleCapture}
-              disabled={isCapturing || !isVideoReady}
-              className={`
-                capture-button relative w-20 h-20 rounded-full border-4 border-white bg-transparent
-                transition-all duration-200 transform
-                ${isCapturing ? 'scale-90 opacity-70' : 'hover:scale-105 active:scale-95'}
-                ${!isVideoReady ? 'opacity-50 cursor-not-allowed' : ''}
-              `}
-              aria-label="Capture photo"
-            >
-              <div className="absolute inset-2 bg-white rounded-full flex items-center justify-center">
-                {isCapturing && (
-                  <div className="w-6 h-6 border-3 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                )}
+            {isCapturing ? (
+              <div className="w-20 h-20 flex items-center justify-center">
+                <RingLoader color="#ffffff" size={80} />
               </div>
-            </button>
+            ) : (
+              <button
+                onClick={handleCapture}
+                disabled={!isVideoReady}
+                className={`
+                  capture-button relative w-20 h-20 rounded-full border-4 border-white bg-transparent
+                  transition-all duration-200 transform
+                  hover:scale-105 active:scale-95
+                  ${!isVideoReady ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
+                aria-label="Capture photo"
+              >
+                <div className="absolute inset-2 bg-white rounded-full" />
+              </button>
+            )}
           </div>
         </div>
       </div>
