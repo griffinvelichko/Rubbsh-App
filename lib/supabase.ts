@@ -91,7 +91,8 @@ export async function saveRecommendation(
     error_description: string
     summary: string
     parts: any[]
-  }
+  },
+  location: string | null = null
 ): Promise<string> {
   const supabase = await createClient()
 
@@ -104,7 +105,7 @@ export async function saveRecommendation(
       error_description: classification.error ? classification.error_description : null,
       summary: classification.summary,
       suggestions: classification.parts,
-      location: null, // Will be implemented later
+      location: location,
     })
     .select()
     .single()

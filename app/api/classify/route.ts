@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
     // Parse FormData
     const formData = await request.formData()
     const imageFile = formData.get('image') as File | null
+    const location = formData.get('location') as string | null
 
     if (!imageFile) {
       return NextResponse.json(
@@ -221,7 +222,7 @@ export async function POST(request: NextRequest) {
     // Save recommendation to database
     console.log('[Classify API] Saving recommendation to database...')
     try {
-      const recommendationId = await saveRecommendation(imageId, user.id, classificationResult)
+      const recommendationId = await saveRecommendation(imageId, user.id, classificationResult, location)
       console.log('[Classify API] Recommendation saved:', recommendationId)
     } catch (dbError) {
       console.error('[Classify API] Failed to save recommendation:', dbError)

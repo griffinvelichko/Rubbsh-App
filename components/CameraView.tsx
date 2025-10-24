@@ -11,7 +11,11 @@ import { AsciiHeader } from './AsciiHeader'
 const MAX_UPLOAD_RETRIES = 3
 const RETRY_DELAY_MS = 1000
 
-export default function CameraView() {
+interface CameraViewProps {
+  location?: string
+}
+
+export default function CameraView({ location }: CameraViewProps = {}) {
   const router = useRouter()
   const {
     videoRef,
@@ -79,6 +83,9 @@ export default function CameraView() {
       // Prepare upload
       const formData = new FormData()
       formData.append('image', compressedBlob, 'capture.jpg')
+      if (location) {
+        formData.append('location', location)
+      }
 
       // Upload with retry logic
       const response = await uploadWithRetry(formData)
