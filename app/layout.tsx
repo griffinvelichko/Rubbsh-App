@@ -2,13 +2,36 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Rubbsh App - Waste Classifier',
-  description: 'Point your camera at waste items to classify them',
+  title: 'Rubbsh App - AI Waste Classification',
+  description: 'Point your camera at waste items to classify them and get recycling recommendations',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/icons/logo.png',
+    apple: '/icons/logo.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
     title: 'Rubbsh',
+  },
+  openGraph: {
+    title: 'Rubbsh App - AI Waste Classification',
+    description: 'Point your camera at waste items to classify them and get recycling recommendations',
+    type: 'website',
+    images: [
+      {
+        url: '/icons/logo.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Rubbsh App Logo',
+      }
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Rubbsh App - AI Waste Classification',
+    description: 'Point your camera at waste items to classify them and get recycling recommendations',
+    images: ['/icons/logo.png'],
   },
   other: {
     'Content-Security-Policy': `
@@ -38,6 +61,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" type="image/png" href="/icons/logo.png" />
+        <link rel="apple-touch-icon" href="/icons/logo.png" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

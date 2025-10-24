@@ -7,6 +7,14 @@
   "background_color": "#111827",
   "theme_color": "#10b981",
   "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
   "permissions": [
     "camera"
   ],
