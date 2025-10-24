@@ -1,8 +1,11 @@
 'use client'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { RingLoader } from 'react-spinners'
 import { useCameraStream } from '@/lib/camera-utils'
 import { compressImage } from '@/lib/image-compression'
+import { HowToUseModal } from './HowToUseModal'
+import { AsciiHeader } from './AsciiHeader'
 
 // Retry configuration
 const MAX_UPLOAD_RETRIES = 3
@@ -22,6 +25,8 @@ export default function CameraView() {
 
   const [isCapturing, setIsCapturing] = useState(false)
   const [captureError, setCaptureError] = useState<string | null>(null)
+  const [freezeFrame, setFreezeFrame] = useState<string | null>(null)
+  const [showFlash, setShowFlash] = useState(false)
 
   const uploadWithRetry = async (
     formData: FormData,
@@ -57,8 +62,16 @@ export default function CameraView() {
       setIsCapturing(true)
       setCaptureError(null)
 
+      // Show camera flash
+      setShowFlash(true)
+      setTimeout(() => setShowFlash(false), 150)
+
       // Capture image from video
       const imageBlob = await captureImage()
+
+      // Create freeze frame from captured image
+      const imageUrl = URL.createObjectURL(imageBlob)
+      setFreezeFrame(imageUrl)
 
       // Compress image
       const compressedBlob = await compressImage(imageBlob)
@@ -98,17 +111,32 @@ export default function CameraView() {
       console.error('Capture error:', err)
       const message = err instanceof Error ? err.message : 'Failed to capture and classify image'
       setCaptureError(message)
+
+      // Clean up freeze frame on error
+      if (freezeFrame) {
+        URL.revokeObjectURL(freezeFrame)
+        setFreezeFrame(null)
+      }
     } finally {
       setIsCapturing(false)
     }
-  }, [captureImage, router])
+  }, [captureImage, router, freezeFrame])
+
+  // Cleanup freeze frame URL on unmount
+  useEffect(() => {
+    return () => {
+      if (freezeFrame) {
+        URL.revokeObjectURL(freezeFrame)
+      }
+    }
+  }, [freezeFrame])
 
   // Loading state
   if (isLoading) {
     return (
       <div className="camera-container flex items-center justify-center min-h-screen bg-gray-900">
         <div className="text-center">
-          <div className="spinner w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <RingLoader color="#3b82f6" size={60} className="mx-auto mb-4" />
           <p className="text-white text-lg">Initializing camera...</p>
         </div>
       </div>
@@ -179,14 +207,34 @@ export default function CameraView() {
         className="camera-preview absolute inset-0 w-full h-full object-cover bg-gray-800"
       />
 
+      {/* Freeze frame - shown when capturing */}
+      {freezeFrame && (
+        <img
+          src={freezeFrame}
+          alt="Captured frame"
+          className="absolute inset-0 w-full h-full object-cover bg-gray-800 z-10"
+        />
+      )}
+
+      {/* Camera flash animation */}
+      {showFlash && (
+        <div className="absolute inset-0 bg-white z-20 animate-flash" />
+      )}
+
+      {/* ASCII Header Animation */}
+      <AsciiHeader />
+
       {/* Overlay UI */}
-      <div className="camera-overlay absolute inset-0 flex flex-col">
+      <div className="camera-overlay absolute inset-0 flex flex-col z-30">
         {/* Top section - hints and status */}
         <div className="flex-1 flex flex-col items-center justify-start p-6 safe-area-top">
-          <div className="bg-black/50 backdrop-blur-sm rounded-full px-6 py-3">
-            <p className="text-white text-center">
-              {isVideoReady ? 'Point camera at waste items' : 'Camera initializing...'}
-            </p>
+          <div className="flex items-center gap-3">
+            <div className="bg-black/50 backdrop-blur-sm rounded-full px-6 py-3">
+              <p className="text-white text-center">
+                {isVideoReady ? 'Point camera at waste items' : 'Camera initializing...'}
+              </p>
+            </div>
+            <HowToUseModal />
           </div>
 
           {captureError && (
@@ -199,23 +247,25 @@ export default function CameraView() {
         {/* Bottom section - capture button */}
         <div className="p-8 safe-area-bottom">
           <div className="flex justify-center">
-            <button
-              onClick={handleCapture}
-              disabled={isCapturing || !isVideoReady}
-              className={`
-                capture-button relative w-20 h-20 rounded-full border-4 border-white bg-transparent
-                transition-all duration-200 transform
-                ${isCapturing ? 'scale-90 opacity-70' : 'hover:scale-105 active:scale-95'}
-                ${!isVideoReady ? 'opacity-50 cursor-not-allowed' : ''}
-              `}
-              aria-label="Capture photo"
-            >
-              <div className="absolute inset-2 bg-white rounded-full flex items-center justify-center">
-                {isCapturing && (
-                  <div className="w-6 h-6 border-3 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                )}
+            {isCapturing ? (
+              <div className="w-20 h-20 flex items-center justify-center">
+                <RingLoader color="#ffffff" size={80} />
               </div>
-            </button>
+            ) : (
+              <button
+                onClick={handleCapture}
+                disabled={!isVideoReady}
+                className={`
+                  capture-button relative w-20 h-20 rounded-full border-4 border-white bg-transparent
+                  transition-all duration-200 transform
+                  hover:scale-105 active:scale-95
+                  ${!isVideoReady ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
+                aria-label="Capture photo"
+              >
+                <div className="absolute inset-2 bg-white rounded-full" />
+              </button>
+            )}
           </div>
         </div>
       </div>

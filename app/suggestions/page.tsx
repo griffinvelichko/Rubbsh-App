@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { RingLoader } from 'react-spinners'
 import type { ClassificationResponse } from '@/app/types'
 import { classificationResponseSchema } from '@/lib/validation'
 
@@ -32,9 +33,11 @@ export default function SuggestionsPage() {
 
   if (isLoading) {
     return (
-      <div className="suggestions-loading">
-        <div className="spinner" />
-        <p>Loading classification...</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <RingLoader color="#3b82f6" size={60} className="mx-auto mb-4" />
+          <p className="text-white text-lg">Loading classification...</p>
+        </div>
       </div>
     )
   }
