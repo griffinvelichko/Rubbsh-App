@@ -5,7 +5,18 @@ import { motion } from 'framer-motion'
 import { useAsciiText } from 'react-ascii-text'
 
 export function AsciiHeader() {
-  const [fontSize, setFontSize] = useState(50)
+  // Calculate initial font size based on screen width
+  const getInitialFontSize = () => {
+    if (typeof window === 'undefined') return 50
+    const screenWidth = window.innerWidth
+    // Mobile: smaller starting size, Desktop: larger starting size
+    if (screenWidth < 640) return 20 // Mobile
+    if (screenWidth < 1024) return 35 // Tablet
+    return 50 // Desktop
+  }
+
+  const [initialSize] = useState(getInitialFontSize)
+  const [fontSize, setFontSize] = useState(initialSize)
   const [opacity, setOpacity] = useState(1)
 
   const asciiTextRef = useAsciiText({
@@ -19,44 +30,56 @@ export function AsciiHeader() {
   })
 
   useEffect(() => {
-    // Rapidly decrease font size from 50 to 1
-    const duration = 2000 // 2 seconds for the animation
-    const steps = 49 // from 50 to 1
-    const stepDuration = duration / steps
+    const duration = 3000 // 3 seconds for the animation
+    const startTime = performance.now()
+    let animationFrame: number
 
-    let currentSize = 50
-    const interval = setInterval(() => {
-      currentSize -= 1
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime
+      const progress = Math.min(elapsed / duration, 1) // 0 to 1
+
+      // Easing function for smoother animation (ease-out)
+      const easeOut = 1 - Math.pow(1 - progress, 3)
+
+      // Calculate current size (from initialSize down to 1)
+      const currentSize = initialSize - (initialSize - 1) * easeOut
       setFontSize(currentSize)
 
-      // Calculate opacity based on size (fade out as it gets smaller)
-      const opacityValue = currentSize / 50
-      setOpacity(opacityValue)
+      // Calculate opacity with smoother fade (quadratic ease-out)
+      const opacityEase = 1 - Math.pow(progress, 2)
+      setOpacity(opacityEase)
 
-      if (currentSize <= 1) {
-        clearInterval(interval)
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate)
+      } else {
         setOpacity(0) // Fully disappear
       }
-    }, stepDuration)
+    }
 
-    return () => clearInterval(interval)
-  }, [])
+    animationFrame = requestAnimationFrame(animate)
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame)
+      }
+    }
+  }, [initialSize])
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none px-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
       <pre
-        ref={asciiTextRef}
-        className="text-white font-mono leading-none"
+        ref={asciiTextRef as any}
+        className="text-white font-mono leading-none max-w-full overflow-hidden"
         style={{
           fontSize: `${fontSize}px`,
           opacity: opacity,
-          transition: 'font-size 0.04s linear, opacity 0.04s linear',
           textShadow: '0 0 10px rgba(59, 130, 246, 0.5)',
+          willChange: 'transform, opacity',
         }}
       />
     </motion.div>
