@@ -5,6 +5,7 @@ import { RingLoader } from 'react-spinners'
 import { useCameraStream } from '@/lib/camera-utils'
 import { compressImage } from '@/lib/image-compression'
 import { HowToUseModal } from './HowToUseModal'
+import { AsciiHeader } from './AsciiHeader'
 
 // Retry configuration
 const MAX_UPLOAD_RETRIES = 3
@@ -180,6 +181,9 @@ export default function CameraView() {
         muted
         className="camera-preview absolute inset-0 w-full h-full object-cover bg-gray-800"
       />
+
+      {/* ASCII Header Animation */}
+      <AsciiHeader />
 
       {/* Overlay UI */}
       <div className="camera-overlay absolute inset-0 flex flex-col">
