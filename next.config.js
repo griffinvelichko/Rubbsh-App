@@ -10,6 +10,25 @@ const nextConfig = {
     unoptimized: true
   },
 
+  // Headers for camera permission persistence on mobile
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(self), microphone=()'
+          },
+          {
+            key: 'Feature-Policy',
+            value: 'camera \'self\'; microphone \'none\''
+          }
+        ],
+      },
+    ]
+  },
+
   // Experimental features
   experimental: {
     optimizePackageImports: ['browser-image-compression']

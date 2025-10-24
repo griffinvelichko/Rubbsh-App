@@ -1,0 +1,15 @@
+{
+  "name": "Rubbsh App",
+  "short_name": "Rubbsh",
+  "description": "AI-powered waste classification app",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#10b981",
+  "orientation": "portrait",
+  "permissions": [
+    "camera"
+  ],
+  "categories": ["utilities", "productivity"],
+  "prefer_related_applications": false
+}
