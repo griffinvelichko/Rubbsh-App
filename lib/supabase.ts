@@ -91,21 +91,27 @@ export async function saveRecommendation(
     error_description: string
     summary: string
     parts: any[]
-  }
+  },
+  location: string | null = null
 ): Promise<string> {
   const supabase = await createClient()
 
+  const insertData = {
+    image_id: imageId,
+    user_id: userId,
+    error: classification.error ? classification.error_description : null,
+    error_description: classification.error ? classification.error_description : null,
+    summary: classification.summary,
+    suggestions: classification.parts,
+    location: location,
+  }
+
+  console.log('[Supabase] Inserting recommendation with location:', location)
+  console.log('[Supabase] Full insert data:', JSON.stringify(insertData, null, 2))
+
   const { data, error } = await supabase
     .from('recommendations')
-    .insert({
-      image_id: imageId,
-      user_id: userId,
-      error: classification.error ? classification.error_description : null,
-      error_description: classification.error ? classification.error_description : null,
-      summary: classification.summary,
-      suggestions: classification.parts,
-      location: null, // Will be implemented later
-    })
+    .insert(insertData)
     .select()
     .single()
 
@@ -113,6 +119,8 @@ export async function saveRecommendation(
     console.error('[Supabase] Failed to save recommendation:', error)
     throw new Error(`Failed to save recommendation: ${error.message}`)
   }
+
+  console.log('[Supabase] Recommendation inserted, ID:', data.id, 'Location:', data.location)
 
   return data.id
 }
