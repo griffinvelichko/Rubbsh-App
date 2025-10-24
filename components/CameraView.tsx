@@ -1,5 +1,5 @@
 'use client'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { RingLoader } from 'react-spinners'
 import { useCameraStream } from '@/lib/camera-utils'
@@ -25,6 +25,8 @@ export default function CameraView() {
 
   const [isCapturing, setIsCapturing] = useState(false)
   const [captureError, setCaptureError] = useState<string | null>(null)
+  const [freezeFrame, setFreezeFrame] = useState<string | null>(null)
+  const [showFlash, setShowFlash] = useState(false)
 
   const uploadWithRetry = async (
     formData: FormData,
@@ -60,8 +62,16 @@ export default function CameraView() {
       setIsCapturing(true)
       setCaptureError(null)
 
+      // Show camera flash
+      setShowFlash(true)
+      setTimeout(() => setShowFlash(false), 150)
+
       // Capture image from video
       const imageBlob = await captureImage()
+
+      // Create freeze frame from captured image
+      const imageUrl = URL.createObjectURL(imageBlob)
+      setFreezeFrame(imageUrl)
 
       // Compress image
       const compressedBlob = await compressImage(imageBlob)
@@ -101,10 +111,25 @@ export default function CameraView() {
       console.error('Capture error:', err)
       const message = err instanceof Error ? err.message : 'Failed to capture and classify image'
       setCaptureError(message)
+
+      // Clean up freeze frame on error
+      if (freezeFrame) {
+        URL.revokeObjectURL(freezeFrame)
+        setFreezeFrame(null)
+      }
     } finally {
       setIsCapturing(false)
     }
-  }, [captureImage, router])
+  }, [captureImage, router, freezeFrame])
+
+  // Cleanup freeze frame URL on unmount
+  useEffect(() => {
+    return () => {
+      if (freezeFrame) {
+        URL.revokeObjectURL(freezeFrame)
+      }
+    }
+  }, [freezeFrame])
 
   // Loading state
   if (isLoading) {
@@ -182,11 +207,25 @@ export default function CameraView() {
         className="camera-preview absolute inset-0 w-full h-full object-cover bg-gray-800"
       />
 
+      {/* Freeze frame - shown when capturing */}
+      {freezeFrame && (
+        <img
+          src={freezeFrame}
+          alt="Captured frame"
+          className="absolute inset-0 w-full h-full object-cover bg-gray-800 z-10"
+        />
+      )}
+
+      {/* Camera flash animation */}
+      {showFlash && (
+        <div className="absolute inset-0 bg-white z-20 animate-flash" />
+      )}
+
       {/* ASCII Header Animation */}
       <AsciiHeader />
 
       {/* Overlay UI */}
-      <div className="camera-overlay absolute inset-0 flex flex-col">
+      <div className="camera-overlay absolute inset-0 flex flex-col z-30">
         {/* Top section - hints and status */}
         <div className="flex-1 flex flex-col items-center justify-start p-6 safe-area-top">
           <div className="flex items-center gap-3">

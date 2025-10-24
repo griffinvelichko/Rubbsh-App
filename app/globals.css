@@ -636,3 +636,23 @@ a:focus-visible {
     border-top-color: #374151;
   }
 }
+
+/* ========================================
+   CAMERA FLASH ANIMATION
+   ======================================== */
+
+@keyframes flash {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-flash {
+  animation: flash 150ms ease-out;
+}
