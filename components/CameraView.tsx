@@ -84,7 +84,10 @@ export default function CameraView({ location }: CameraViewProps = {}) {
       const formData = new FormData()
       formData.append('image', compressedBlob, 'capture.jpg')
       if (location) {
+        console.log('[CameraView] Adding location to upload:', location)
         formData.append('location', location)
+      } else {
+        console.log('[CameraView] No location to add to upload')
       }
 
       // Upload with retry logic
