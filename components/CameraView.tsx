@@ -241,7 +241,7 @@ export default function CameraView({ location }: CameraViewProps = {}) {
           <div className="flex items-center gap-3">
             <div className="bg-black/50 backdrop-blur-sm rounded-full px-6 py-3">
               <p className="text-white text-center">
-                {isVideoReady ? 'Point camera at waste items' : 'Camera initializing...'}
+                {isVideoReady ? 'Take photo of waste items' : 'Camera initializing...'}
               </p>
             </div>
             <HowToUseModal />
