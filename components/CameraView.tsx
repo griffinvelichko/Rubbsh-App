@@ -144,7 +144,7 @@ export default function CameraView({ location }: CameraViewProps = {}) {
   // Loading state
   if (isLoading) {
     return (
-      <div className="camera-container flex items-center justify-center min-h-screen bg-gray-900">
+      <div className="camera-container flex items-center justify-center h-dvh bg-gray-900">
         <div className="text-center">
           <RingLoader color="#3b82f6" size={60} className="mx-auto mb-4" />
           <p className="text-white text-lg">Initializing camera...</p>
@@ -156,7 +156,7 @@ export default function CameraView({ location }: CameraViewProps = {}) {
   // Error states with specific recovery actions
   if (error || !hasPermission) {
     return (
-      <div className="camera-container flex items-center justify-center min-h-screen bg-gray-900 p-6">
+      <div className="camera-container flex items-center justify-center h-dvh bg-gray-900 p-6">
         <div className="max-w-md w-full bg-gray-800 rounded-lg p-8 text-center">
           <div className="mb-6">
             <svg className="w-16 h-16 mx-auto text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -207,7 +207,7 @@ export default function CameraView({ location }: CameraViewProps = {}) {
 
   // Camera view
   return (
-    <div className="camera-container relative min-h-screen bg-gray-900">
+    <div className="camera-container relative h-dvh bg-gray-900">
       {/* Video preview - full screen */}
       <video
         ref={videoRef}
@@ -241,7 +241,7 @@ export default function CameraView({ location }: CameraViewProps = {}) {
           <div className="flex items-center gap-3">
             <div className="bg-black/50 backdrop-blur-sm rounded-full px-6 py-3">
               <p className="text-white text-center">
-                {isVideoReady ? 'Point camera at waste items' : 'Camera initializing...'}
+                {isVideoReady ? 'Take photo of waste items' : 'Camera initializing...'}
               </p>
             </div>
             <HowToUseModal />
