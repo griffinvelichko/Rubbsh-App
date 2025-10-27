@@ -1,5 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest, userAgent } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -37,9 +37,14 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // If no user is found and not on the home page, sign in anonymously
+  // Detect if request is from a bot
+  const { isBot } = userAgent(request)
+
+  // If no user is found and not a bot, sign in anonymously
+  // Bots (Googlebot, social media crawlers, etc.) should not create anonymous users
   if (
     !user &&
+    !isBot &&
     !request.nextUrl.pathname.startsWith('/api') &&
     !request.nextUrl.pathname.startsWith('/_next')
   ) {
@@ -54,6 +59,9 @@ export async function updateSession(request: NextRequest) {
   } else if (user) {
     // User session found in cookies - reusing existing user
     console.log('[Middleware] ♻️ REUSING existing user:', user.id, '| Anonymous:', user.is_anonymous)
+  } else if (isBot) {
+    // Bot detected - skip anonymous sign-in to prevent database bloat
+    console.log('[Middleware] 🤖 BOT detected - skipping anonymous sign-in')
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
