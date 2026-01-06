@@ -97,6 +97,24 @@ export function useCameraStream() {
     throw lastError || new Error('All camera constraints failed')
   }, [])
 
+  const handleTrackEnded = useCallback(() => {
+    console.log('Camera track ended unexpectedly')
+    setError({
+      type: 'device',
+      message: 'Camera disconnected. Please reconnect and refresh.',
+      recoverable: true
+    })
+    // Clean up stream inline to avoid circular dependency
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop())
+      streamRef.current = null
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null
+    }
+    setIsVideoReady(false)
+  }, [])
+
   const stopStream = useCallback(() => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => {
@@ -112,17 +130,7 @@ export function useCameraStream() {
     }
 
     setIsVideoReady(false)
-  }, [])
-
-  const handleTrackEnded = useCallback(() => {
-    console.log('Camera track ended unexpectedly')
-    setError({
-      type: 'device',
-      message: 'Camera disconnected. Please reconnect and refresh.',
-      recoverable: true
-    })
-    stopStream()
-  }, [stopStream])
+  }, [handleTrackEnded])
 
   const initCamera = useCallback(async () => {
     try {
@@ -260,7 +268,8 @@ export function useCameraStream() {
         video.addEventListener('canplay', handleCanPlay)
       }
     }
-  }, [streamRef.current, videoRef.current])
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally syncing refs, runs on re-render when stream changes
+  }, [hasPermission])
 
   // Initialize camera on mount
   useEffect(() => {
@@ -278,6 +287,7 @@ export function useCameraStream() {
       mounted = false
       stopStream()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional mount-only effect
   }, [])
 
   const captureImage = useCallback(async (): Promise<Blob> => {

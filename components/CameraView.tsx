@@ -32,7 +32,7 @@ export default function CameraView({ location }: CameraViewProps = {}) {
   const [freezeFrame, setFreezeFrame] = useState<string | null>(null)
   const [showFlash, setShowFlash] = useState(false)
 
-  const uploadWithRetry = async (
+  const uploadWithRetry = useCallback(async (
     formData: FormData,
     retries = MAX_UPLOAD_RETRIES
   ): Promise<Response> => {
@@ -59,7 +59,7 @@ export default function CameraView({ location }: CameraViewProps = {}) {
       }
       throw error
     }
-  }
+  }, [])
 
   const handleCapture = useCallback(async () => {
     try {
@@ -130,7 +130,7 @@ export default function CameraView({ location }: CameraViewProps = {}) {
     } finally {
       setIsCapturing(false)
     }
-  }, [captureImage, router, freezeFrame])
+  }, [captureImage, router, freezeFrame, location, uploadWithRetry])
 
   // Cleanup freeze frame URL on unmount
   useEffect(() => {
@@ -219,6 +219,7 @@ export default function CameraView({ location }: CameraViewProps = {}) {
 
       {/* Freeze frame - shown when capturing */}
       {freezeFrame && (
+        // eslint-disable-next-line @next/next/no-img-element -- blob URL from camera cannot be optimized
         <img
           src={freezeFrame}
           alt="Captured frame"
