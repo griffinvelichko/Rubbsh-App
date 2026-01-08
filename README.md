@@ -9,7 +9,6 @@ An AI-powered waste classification app that helps users properly sort their garb
 - **Location-Aware** - Supports location-specific sorting rules via URL parameters
 - **Four-Stream Sorting** - Classifies items into Food Scraps, Recyclable Containers, Paper, or Garbage
 - **PWA Support** - Installable as a Progressive Web App on mobile devices
-- **Dark Mode** - Automatic dark mode based on system preferences
 - **Privacy-Focused** - Anonymous authentication with user-owned data
 
 ## Tech Stack
@@ -179,7 +178,7 @@ npm run type-check # Run TypeScript type checking
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the repository
+1. Clone the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
@@ -187,7 +186,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source.
 
 ## Acknowledgments
 
